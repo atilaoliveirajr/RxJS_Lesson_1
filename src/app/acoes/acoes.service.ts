@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, pluck } from 'rxjs/operators';
 import { Acao, AcoesAPI } from './modelo/acoes';
@@ -9,8 +9,9 @@ import { Acao, AcoesAPI } from './modelo/acoes';
 export class AcoesService {
 	constructor(private _httpClinet: HttpClient) {}
 
-	getAcoes() {
-		return this._httpClinet.get<AcoesAPI>('http://localhost:3000/acoes').pipe(
+	getAcoes(valor?: string) {
+    const params = valor ? new HttpParams().append('valor', valor) : undefined;
+		return this._httpClinet.get<AcoesAPI>('http://localhost:3000/acoes', {params}).pipe(
       pluck('payload'),
 			map((acoes) => {
 				return acoes.sort((acaoA, acaoB )=>  this._ordenaPorCodigo(acaoA, acaoB));
